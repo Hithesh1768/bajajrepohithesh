@@ -10,22 +10,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout repo
+      # 1️⃣ Checkout repository
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Step 2: Set up JDK 17
+      # 2️⃣ Set up Java 17
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           distribution: temurin
           java-version: 17
 
-      # Step 3: Build JAR (skip tests)
+      # 3️⃣ Build JAR with Maven (skip tests)
       - name: Build Spring Boot JAR
         run: mvn clean package -DskipTests
 
-      # Step 4: Create a GitHub Release (if none exists, auto-create)
+      # 4️⃣ Create a GitHub Release (auto-create if it doesn't exist)
       - name: Create Release
         id: create_release
         uses: softprops/action-gh-release@v1
@@ -34,7 +34,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # Step 5: Upload JAR as release asset
+      # 5️⃣ Upload JAR as release asset
       - name: Upload JAR to Release
         uses: softprops/action-gh-release@v1
         with:
