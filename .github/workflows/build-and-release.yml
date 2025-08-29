@@ -1,0 +1,43 @@
+name: Build and Release Spring Boot JAR
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: # allows manual run
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout repo
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up JDK 17
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 17
+
+      # Step 3: Build JAR (skip tests)
+      - name: Build Spring Boot JAR
+        run: mvn clean package -DskipTests
+
+      # Step 4: Create a GitHub Release (if none exists, auto-create)
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v1.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Step 5: Upload JAR as release asset
+      - name: Upload JAR to Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: target/*.jar
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
