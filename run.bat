@@ -1,0 +1,9 @@
+@echo off
+echo Starting Bajaj Health Qualifier...
+echo.
+echo Building project...
+call mvn clean install
+echo.
+echo Running application...
+call mvn spring-boot:run
+pause
